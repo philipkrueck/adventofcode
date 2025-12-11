@@ -1,9 +1,9 @@
 package day2
 
 import (
-	"fmt"
 	"iter"
 	"math"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -23,7 +23,22 @@ func Part1() int {
 
 		invalids := invalidNums1(r)
 
-		fmt.Printf("Found invalids: %d in range %d\n", invalids, r)
+		for _, invalid := range invalids {
+			sum += invalid
+		}
+	}
+
+	return sum
+}
+
+func Part2() int {
+	fileContents := fileToStr("day2/input.txt")
+	ranges := parseInput(fileContents)
+	sum := 0
+
+	for _, r := range ranges {
+
+		invalids := invalidNums2(r)
 
 		for _, invalid := range invalids {
 			sum += invalid
@@ -87,6 +102,34 @@ func invalidNums1(r Range) []int {
 		}
 
 		invalids = append(invalids, invalidNums(sr, k)...)
+	}
+	return invalids
+}
+
+func invalidNums2(r Range) []int {
+	invalids := []int{}
+
+	sameDigitRanges := splitRange(r)
+
+	for _, sr := range sameDigitRanges {
+
+		n := numDigits(sr.start)
+
+		maxK := int(math.Ceil(float64(n) / 2))
+
+		for k := 1; k <= maxK; k++ {
+			if n%k != 0 {
+				continue // we only care about a `k` that fits exactly twice inside n
+			}
+
+			for _, invalid := range invalidNums(sr, k) {
+				if !slices.Contains(invalids, invalid) {
+					invalids = append(invalids, invalid)
+				}
+			}
+
+		}
+
 	}
 	return invalids
 }

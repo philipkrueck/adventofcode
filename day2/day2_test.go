@@ -22,9 +22,38 @@ var casesPart1 = []struct {
 	{Range{1, 13}, []int{11}},
 }
 
-func TestInvalidIdsPart1(t *testing.T) {
+func TestInvalidNumsPart1(t *testing.T) {
 	for _, test := range casesPart1 {
 		got := invalidNums1(test.r)
+
+		if !slices.Equal(got, test.want) {
+			t.Errorf("got: %v, want: %v", got, test.want)
+		}
+	}
+}
+
+var casesPart2 = []struct {
+	r    Range
+	want []int
+}{
+	{Range{11, 22}, []int{11, 22}},
+	{Range{95, 115}, []int{99, 111}},
+	{Range{998, 1010}, []int{999, 1010}},
+	{Range{1188511880, 1188511890}, []int{1188511885}},
+	{Range{1698522, 1698528}, []int{}},
+	{Range{222220, 222224}, []int{222222}},
+	{Range{446443, 446449}, []int{446446}},
+	{Range{38593856, 38593862}, []int{38593859}},
+	{Range{565653, 565659}, []int{565656}},
+	{Range{1000, 1009}, []int{}},
+	{Range{824824821, 824824827}, []int{824824824}},
+	{Range{1, 13}, []int{11}},
+	{Range{2121212118, 2121212124}, []int{2121212121}},
+}
+
+func TestInvalidNumsPart2(t *testing.T) {
+	for _, test := range casesPart2 {
+		got := invalidNums2(test.r)
 
 		if !slices.Equal(got, test.want) {
 			t.Errorf("got: %v, want: %v", got, test.want)
