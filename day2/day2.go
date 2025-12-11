@@ -10,50 +10,26 @@ import (
 	"github.com/philipkrueck/advent-of-code/lines"
 )
 
-type ProductRange struct {
-	lower, upper int
+type Range struct {
+	start, end int
 }
 
 func Part1() int {
-	return CommonLogic(invalidIdsPart1)
-}
-
-func Part2() int {
-	return CommonLogic(invalidIdsPart2)
-}
-
-func CommonLogic(invalidFilter func(int, int) []int) int {
 	fileContents := fileToStr("day2/input.txt")
-	fmt.Println("fileContents:", fileContents)
-
-	idRanges := strings.Split(fileContents, ",")
-
-	fmt.Println("idRanges", idRanges)
-
-	productRanges := []ProductRange{}
-
-	for _, idRange := range idRanges {
-		productRange := strings.Split(idRange, "-")
-
-		lower, _ := strconv.Atoi(productRange[0])
-		upper, _ := strconv.Atoi(productRange[1])
-
-		productRanges = append(productRanges, ProductRange{
-			lower,
-			upper,
-		},
-		)
-	}
-
-	fmt.Println("productRanges", productRanges)
-
+	ranges := parseInput(fileContents)
 	sum := 0
-	for _, productRange := range productRanges {
-		for _, productId := range invalidFilter(productRange.lower, productRange.upper) {
-			fmt.Println("id:", productId)
-			sum += productId
+
+	for _, r := range ranges {
+
+		invalids := invalidNums1(r)
+
+		fmt.Printf("Found invalids: %d in range %d\n", invalids, r)
+
+		for _, invalid := range invalids {
+			sum += invalid
 		}
 	}
+
 	return sum
 }
 
@@ -71,67 +47,126 @@ func fileToStr(fileName string) string {
 	return ""
 }
 
-func invalidIdsPart1(lower, upper int) []int {
-	invalids := []int{}
+func parseInput(input string) []Range {
+	idRanges := strings.Split(input, ",")
 
-	idStr := strconv.Itoa(lower)
-	idDigits := len(idStr)
+	ranges := []Range{}
 
-	if idDigits%2 != 0 {
-		nextID := int(math.Pow(10, float64(idDigits)))
-		idStr = strconv.Itoa(nextID)
-	}
+	for _, idRange := range idRanges {
+		singleRange := strings.Split(idRange, "-")
 
-	middle := len(idStr) / 2
-
-	leftStr := idStr[0:middle]
-	left, _ := strconv.Atoi(leftStr)
-	potentialInvalid, _ := strconv.Atoi(leftStr + leftStr)
-
-	for potentialInvalid <= upper {
-		if potentialInvalid >= lower {
-			invalids = append(invalids, potentialInvalid)
+		start, err := strconv.Atoi(singleRange[0])
+		if err != nil {
+			panic("Couldn't parse input. Expected properly formatted input")
 		}
 
-		left += 1
-		leftStr = strconv.Itoa(left)
-		potentialInvalid, _ = strconv.Atoi(leftStr + leftStr)
+		end, err := strconv.Atoi(singleRange[1])
+		if err != nil {
+			panic("Couldn't parse input. Expected properly formatted input")
+		}
+
+		newRange := Range{start, end}
+		ranges = append(ranges, newRange)
 	}
 
+	return ranges
+}
+
+func invalidNums1(r Range) []int {
+	invalids := []int{}
+
+	sameDigitRanges := splitRange(r)
+
+	for _, sr := range sameDigitRanges {
+
+		n := numDigits(sr.start)
+		k := int(math.Ceil(float64(n) / 2))
+
+		if n%k != 0 {
+			continue // we only care about a `k` that fits exactly twice inside n
+		}
+
+		invalids = append(invalids, invalidNums(sr, k)...)
+	}
 	return invalids
 }
 
 func numDigits(num int) int {
 	str := strconv.Itoa(num)
-	return len(str)
+	return len(str) // could also use log10
 }
 
-func invalidIdsPart2(lower, upper int) []int {
-	invalids := []int{}
-
-	idStr := strconv.Itoa(lower)
-	idDigits := len(idStr)
-
-	if idDigits%2 != 0 {
-		nextID := int(math.Pow(10, float64(idDigits)))
-		idStr = strconv.Itoa(nextID)
+// This function assumes that the
+//
+// input:
+// - k is the number of repeating digits
+//
+// conditions:
+// - nums.start & nums.end have the same number of digits
+// - k must be a divisor of the numDigits(low)
+func invalidNums(nums Range, k int) []int {
+	n := numDigits(nums.start)
+	if n != numDigits(nums.end) || n == 1 {
+		return []int{}
 	}
 
-	middle := len(idStr) / 2
+	if n%k != 0 {
+		return []int{}
+	}
 
-	leftStr := idStr[0:middle]
-	left, _ := strconv.Atoi(leftStr)
-	potentialInvalid, _ := strconv.Atoi(leftStr + leftStr)
+	repeatedRange := Range{
+		mostKSignificantDigits(nums.start, k),
+		mostKSignificantDigits(nums.end, k),
+	}
 
-	for potentialInvalid <= upper {
-		if potentialInvalid >= lower {
-			invalids = append(invalids, potentialInvalid)
+	repeatedCount := n / k
+
+	invalids := []int{}
+
+	for i := repeatedRange.start; i <= repeatedRange.end; i++ {
+		invalidStr := strings.Repeat(strconv.Itoa(i), repeatedCount)
+
+		invalid, err := strconv.Atoi(invalidStr)
+		if err != nil {
+			panic("couldn't convert str for some reason")
 		}
 
-		left += 1
-		leftStr = strconv.Itoa(left)
-		potentialInvalid, _ = strconv.Atoi(leftStr + leftStr)
+		if invalid <= nums.end && invalid >= nums.start {
+			invalids = append(invalids, invalid)
+		}
 	}
 
 	return invalids
+}
+
+func mostKSignificantDigits(num int, k int) int {
+	digits := numDigits(num)
+	exp := int(math.Max(0, float64(digits-k)))
+	return num / int(math.Pow10(exp))
+}
+
+// splits into ranges with same number of decimals
+func splitRange(r Range) []Range {
+	ranges := []Range{}
+
+	currDigits := numDigits(r.start)
+	maxDigits := numDigits(r.end)
+
+	for currDigits < maxDigits {
+		currEnd := nines(currDigits)
+		currRange := Range{r.start, currEnd}
+
+		ranges = append(ranges, currRange)
+
+		r.start = currEnd + 1
+		currDigits++
+	}
+
+	ranges = append(ranges, r)
+
+	return ranges
+}
+
+func nines(count int) int {
+	return int(math.Pow10(count)) - 1
 }
