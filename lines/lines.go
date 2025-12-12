@@ -23,6 +23,14 @@ func NewReader(fileName string) LineReader {
 	return lineReader
 }
 
+func (lr *LineReader) Lines() (lines []string) {
+	for line := range lr.Next() {
+		lines = append(lines, line)
+	}
+
+	return lines
+}
+
 func (lr LineReader) Next() iter.Seq[string] {
 	return func(yield func(string) bool) {
 		for lr.scanner.Scan() {
