@@ -8,4 +8,5 @@ import (
 
 func main() {
 	fmt.Println("Solution to day three part 1:", day3.Part1())
+	fmt.Println("Solution to day three part 2:", day3.Part2())
 }

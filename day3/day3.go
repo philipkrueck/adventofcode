@@ -1,46 +1,47 @@
 package day3
 
 import (
+	"math"
+
 	"github.com/philipkrueck/advent-of-code/lines"
 )
 
 func Part1() int {
-	lineReader := lines.NewReader("day3/input.txt")
-	banks := lineReader.Lines()
+	return sumLinesForKDigitNumber(2)
+}
+
+func Part2() int {
+	return sumLinesForKDigitNumber(12)
+}
+
+func sumLinesForKDigitNumber(k int) int {
+	r := lines.NewReader("day3/input.txt")
+	lines := r.Lines()
 
 	sum := 0
-	for _, bank := range banks {
-		sum += largestVoltage(bank, 2)
+	for _, line := range lines {
+		sum += largestVoltage(line, k)
 	}
 
 	return sum
 }
 
-func Part2() int {
-	return 0
-}
+func largestVoltage(line string, k int) int {
+	voltage := 0
+	maxIdx := -1
 
-func largestVoltage(bank string, k int) int {
-	highestLeft := 0
-	leftIdx := 0
-
-	for i := 0; i <= len(bank)-k; i++ {
-		digit := int(bank[i] - '0')
-		if digit > highestLeft {
-			highestLeft = digit
-			leftIdx = i
+	for k > 0 {
+		max := 0
+		for i := maxIdx + 1; i <= len(line)-k; i++ {
+			d := int(line[i] - '0')
+			if d > max {
+				max = d
+				maxIdx = i
+			}
 		}
-	}
-	k--
-
-	highestRight := 0
-
-	for i := leftIdx + 1; i <= len(bank)-k; i++ {
-		digit := int(bank[i]) - '0'
-		if digit > highestRight {
-			highestRight = digit
-		}
+		voltage += max * int(math.Pow10(k-1))
+		k--
 	}
 
-	return 10*highestLeft + highestRight
+	return voltage
 }
