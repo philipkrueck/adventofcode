@@ -6,55 +6,67 @@ import (
 
 func Part1() int {
 	r := lines.NewReader("day4/input.txt")
-	lines := r.Lines()
+	grid := Grid(r.Lines())
 
-	return sumAccessibleRolls(lines)
+	return grid.CountAccessible()
 }
 
 func Part2() int {
 	return 0
 }
 
-func sumAccessibleRolls(grid []string) (count int) {
+type Index struct {
+	I, j int
+}
+
+type Grid []string
+
+func (grid Grid) CountAccessible() int {
+	var n int
 	for i, line := range grid {
 		for j := range line {
-			if isAccessible(grid, i, j) {
-				count++
+			if grid.IsAccessible(Index{i, j}) {
+				n++
 			}
 		}
 	}
-
-	return count
+	return n
 }
 
-func isPaper(grid []string, i, j int) bool {
-	insideGrid := i >= 0 && j >= 0 && i < len(grid) && j < len(grid[i])
+func (g Grid) InBounds(idx Index) bool {
+	return idx.I >= 0 && idx.j >= 0 && idx.I < len(g) && idx.j < len(g[idx.I])
+}
 
-	if !insideGrid {
+func (g Grid) At(idx Index) rune {
+	return rune(g[idx.I][idx.j])
+}
+
+func (grid Grid) IsAccessible(idx Index) bool {
+	if grid.At(idx) != '@' {
 		return false
 	}
 
-	return grid[i][j] == '@'
-}
+	neighbors := 0
 
-func isAccessible(grid []string, i, j int) bool {
-	if grid[i][j] != '@' {
-		return false
-	}
-
-	surroundingRolls := 0
-
-	for x := i - 1; x <= i+1; x++ {
-		for y := j - 1; y <= j+1; y++ {
-			if x == i && y == j {
+	for x := idx.I - 1; x <= idx.I+1; x++ {
+		for y := idx.j - 1; y <= idx.j+1; y++ {
+			if x == idx.I && y == idx.j {
 				continue
 			}
 
-			if isPaper(grid, x, y) {
-				surroundingRolls++
+			if grid.HasPaper(Index{x, y}) {
+				neighbors++
 			}
 		}
 	}
 
-	return surroundingRolls < 4
+	return neighbors < 4
+}
+
+func (grid Grid) HasPaper(idx Index) bool {
+	if !grid.InBounds(idx) {
+		return false
+	}
+
+	return grid.At(idx) == '@'
 }

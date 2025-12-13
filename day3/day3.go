@@ -16,10 +16,10 @@ func Part2() int {
 
 func sumLinesForKDigitNumber(k int) int {
 	r := lines.NewReader("day3/input.txt")
-	lines := r.Lines()
+	grid := r.Lines()
 
 	sum := 0
-	for _, line := range lines {
+	for _, line := range grid {
 		sum += largestVoltage(line, k)
 	}
 
