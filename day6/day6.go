@@ -30,6 +30,7 @@ func parseLines(lines []string) ([][]int, []Op) {
 			grid = append(grid, parseNums(line))
 		}
 	}
+
 	return grid, ops
 }
 
@@ -46,21 +47,6 @@ func parseNums(line string) []int {
 	}
 
 	return nums
-}
-
-func parseOps(line string) []Op {
-	ops := []Op{}
-
-	for field := range strings.FieldsSeq(line) {
-		switch field {
-		case "*":
-			ops = append(ops, Multiply)
-		case "+":
-			ops = append(ops, Add)
-		}
-	}
-
-	return ops
 }
 
 func multiplyColumn(grid [][]int, j int) int {
@@ -101,10 +87,152 @@ func operateColumns(grid [][]int, operations []Op) int {
 }
 
 func Part2() int {
-	// r := lines.NewReader("day6/input.txt")
-	// lines := r.Lines()
+	r := lines.NewReader("day6/input.txt")
+	lines := r.Lines()
 
-	// fmt.Println("lines: ", lines)
+	grid, ops := parse(lines)
 
-	return 0
+	return operateGrid(grid, ops)
+}
+
+func parse(lines []string) ([][][]int, []Op) {
+	grid := [][][]int{}
+	lastIdx := len(lines) - 1
+	opsLine := lines[lastIdx]
+	ops := parseOps(opsLine)
+
+	digitLengths := parseDigitLengths(opsLine)
+
+	for i := range lastIdx {
+		parsedLine := parseLine(lines[i], digitLengths)
+		grid = append(grid, parsedLine)
+	}
+
+	return grid, ops
+}
+
+func parseOps(line string) []Op {
+	ops := []Op{}
+
+	for field := range strings.FieldsSeq(line) {
+		switch field {
+		case "*":
+			ops = append(ops, Multiply)
+		case "+":
+			ops = append(ops, Add)
+		}
+	}
+
+	return ops
+}
+
+func parseLine(line string, digitLengths []int) [][]int {
+	numLine := [][]int{}
+
+	j := 0
+
+	for _, column := range digitLengths {
+		num := []int{}
+		for range column {
+			ch := rune(line[j])
+			if ch == ' ' {
+				num = append(num, 0)
+			} else {
+				d := int(ch) - '0'
+				num = append(num, d)
+			}
+			j++
+		}
+		numLine = append(numLine, num)
+		j++ // skip whitespace between columns
+	}
+	return numLine
+}
+
+func parseDigitLengths(line string) []int {
+	lengths := []int{}
+
+	length := 0
+	for j := 1; j < len(line); j++ {
+		if line[j] == ' ' {
+			length++
+		} else {
+			lengths = append(lengths, length)
+			length = 0
+		}
+	}
+	lengths = append(lengths, length+1)
+
+	return lengths
+}
+
+func convertColToCephs(nums [][]int) []int {
+	cephs := []int{}
+
+	for j := range len(nums[0]) {
+		ceph := 0
+
+		for i := range len(nums) {
+			n := nums[i][j]
+			if n == 0 {
+				continue
+			}
+			ceph = (ceph * 10) + n
+		}
+		cephs = append(cephs, ceph)
+	}
+
+	return cephs
+}
+
+func sumNums(nums []int) int {
+	sum := 0
+	for _, n := range nums {
+		sum += n
+	}
+	return sum
+}
+
+func multiplyNums(nums []int) int {
+	prod := 1
+	for _, n := range nums {
+		prod *= n
+	}
+	return prod
+}
+
+func gridToCephs(grid [][][]int) [][]int {
+	cephs := [][]int{}
+	colCount := len(grid[0])
+	rowCount := len(grid)
+
+	for j := range colCount {
+		col := [][]int{}
+
+		for i := range rowCount {
+			col = append(col, grid[i][j])
+		}
+
+		ceph := convertColToCephs(col)
+		cephs = append(cephs, ceph)
+	}
+
+	return cephs
+}
+
+func operateGrid(grid [][][]int, ops []Op) int {
+	total := 0
+
+	cephs := gridToCephs(grid)
+
+	for i, op := range ops {
+		switch op {
+		case Add:
+			total += sumNums(cephs[i])
+		case Multiply:
+			total += multiplyNums(cephs[i])
+		}
+	}
+
+	return total
 }
