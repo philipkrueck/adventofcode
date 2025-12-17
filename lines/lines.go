@@ -27,8 +27,14 @@ func (lr *LineReader) Lines() (lines []string) {
 	for line := range lr.Next() {
 		lines = append(lines, line)
 	}
-
 	return lines
+}
+
+func (lr *LineReader) ByteLines() (bytes [][]byte) {
+	for line := range lr.Next() {
+		bytes = append(bytes, []byte(line))
+	}
+	return bytes
 }
 
 func (lr LineReader) Next() iter.Seq[string] {
