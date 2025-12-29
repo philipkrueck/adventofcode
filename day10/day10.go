@@ -1,7 +1,6 @@
 package day10
 
 import (
-	"fmt"
 	"slices"
 	"strconv"
 	"strings"
@@ -131,74 +130,114 @@ func minPressesLight(config MachineConfig) int {
 
 func minPressesJoltages(configs []MachineConfig) int {
 	var presses int
+
+	cache := make(map[Joltage]int)
+
 	for _, c := range configs {
-		fmt.Printf("finding min joltage for config: %v\n\n", c)
-		presses += minPressesJoltage(c)
+		combos := btnCombos(c.Buttons)
+		minPresses := minPressesJoltagesRec(toJoltage(c.Joltage), cache, combos)
+		presses += minPresses
 	}
 	return presses
 }
 
-type VisitedKey [16]int
+func toJoltage(old []int) (j Joltage) {
+	for i, o := range old {
+		j[i] = o
+	}
+	return
+}
 
-func minPressesJoltage(config MachineConfig) int {
-	initial := make([]int, len(config.Light))
-	root := JoltageNode{initial, 0, distanceToGoal(initial, config.Joltage)}
-	stack := []JoltageNode{root}
-	visited := make(map[VisitedKey]bool)
+// This generates the power set
+// TODO: write this as a generic power set generation algorithm
+func btnCombos(buttons [][]int) [][][]int {
+	numButtons := len(buttons)
+	numCombos := 1 << numButtons // 2^numButtons
+	combos := make([][][]int, numCombos)
 
-	for len(stack) > 0 {
-		curr := stack[len(stack)-1]
-		stack = stack[0 : len(stack)-1]
-
-		// check visited
-		key := VisitedKey{}
-		copy(key[:], curr.State)
-		if visited[key] {
-			continue
-		}
-		visited[key] = true
-
-		if slices.Equal(curr.State, config.Joltage) {
-			fmt.Println("solved with presses:", curr.depth)
-			return curr.depth
-		}
-
-		nextJoltages := []JoltageNode{}
-
-		for _, b := range config.Buttons {
-			nextState := applyJoltage(b, curr.State)
-
-			if !validState(nextState, config.Joltage) {
-				continue
+	for mask := 0; mask < numCombos; mask++ {
+		pressed := [][]int{}
+		for btn := 0; btn < numButtons; btn++ {
+			if (mask & (1 << btn)) != 0 {
+				pressed = append(pressed, buttons[btn])
 			}
-			node := JoltageNode{
-				nextState,
-				curr.depth + 1,
-				distanceToGoal(nextState, config.Joltage),
-			}
-			nextJoltages = append(nextJoltages, node)
 		}
-		slices.SortFunc(nextJoltages, func(a, b JoltageNode) int {
-			return b.distance - a.distance
-		})
-		stack = append(stack, nextJoltages...)
+		combos[mask] = pressed
+	}
+	return combos
+}
+
+const MaxJoltages = 10
+
+type Joltage [MaxJoltages]int
+
+func minPressesJoltagesRec(j Joltage, cache map[Joltage]int, btnCombos [][][]int) int {
+	if allZero(j) {
+		return 0
 	}
 
-	return 0
+	if joltage, ok := cache[j]; ok {
+		return joltage
+	}
+
+	minPresses := 10000000
+
+	for _, combo := range btnCombos {
+		newJ := applyBtnCombo(j, combo)
+		if !joltageIsEven(newJ) {
+			continue
+		}
+
+		count := 2*minPressesJoltagesRec(joltageHalved(newJ), cache, btnCombos) + len(combo)
+		if count < minPresses {
+			minPresses = count
+		}
+	}
+
+	// TODO: add caching for optimization
+	// cache[j] = minPresses
+
+	return minPresses
+}
+
+func applyBtnCombo(joltage Joltage, combo [][]int) Joltage {
+	for _, btn := range combo {
+		for _, joltIdx := range btn {
+			joltage[joltIdx]--
+		}
+	}
+	return joltage
+}
+
+func joltageHalved(joltage Joltage) Joltage {
+	for i := range joltage {
+		joltage[i] /= 2
+	}
+	return joltage
+}
+
+func joltageIsEven(joltage Joltage) bool {
+	for _, jolt := range joltage {
+		if jolt%2 != 0 || jolt < 0 {
+			return false
+		}
+	}
+	return true
+}
+
+func allZero(joltage Joltage) bool {
+	for _, jolt := range joltage {
+		if jolt != 0 {
+			return false
+		}
+	}
+	return true
 }
 
 func applyLight(button []int, state []bool) []bool {
 	nextState := slices.Clone(state)
 	for _, i := range button {
 		nextState[i] = !nextState[i]
-	}
-	return nextState
-}
-
-func applyJoltage(button []int, state []int) []int {
-	nextState := slices.Clone(state)
-	for _, i := range button {
-		nextState[i] = nextState[i] + 1
 	}
 	return nextState
 }

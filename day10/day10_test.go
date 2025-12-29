@@ -141,3 +141,17 @@ func TestMinPresses(t *testing.T) {
 		})
 	}
 }
+
+func TestMinPressesJoltageRec(t *testing.T) {
+	joltages := toJoltage([]int{10, 11, 11, 5, 10, 5})
+	buttons := [][]int{{0, 1, 2, 3, 4}, {0, 3, 4}, {0, 1, 2, 4, 5}, {1, 2}}
+	cache := make(map[Joltage]int)
+	combos := btnCombos(buttons)
+
+	got := minPressesJoltagesRec(joltages, cache, combos)
+	want := 11
+
+	if got != want {
+		t.Errorf("got: %v; want: %v", got, want)
+	}
+}
