@@ -11,7 +11,7 @@ func Part1() int {
 	answer := 0
 	dial := 50
 
-	lineReader := lines.NewReader("day1/input.txt")
+	lineReader := lines.NewReader("2025/day1/input.txt")
 
 	for line := range lineReader.Next() {
 		direction, suffix := line[0], line[1:]
@@ -46,7 +46,7 @@ func Part1() int {
 func Part2() int {
 	dial := 50
 	answer := 0
-	lineReader := lines.NewReader("day1/input.txt")
+	lineReader := lines.NewReader("2025/day1/input.txt")
 
 	for line := range lineReader.Next() {
 		direction, suffix := line[0], line[1:]

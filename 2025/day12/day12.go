@@ -9,7 +9,7 @@ import (
 // Based on Reddit comment: https://www.reddit.com/r/adventofcode/comments/1pkjynl/2025_day_12_day_12_solutions/
 
 func Part1() int {
-	r := lines.NewReader("day12/input.txt")
+	r := lines.NewReader("2025/day12/input.txt")
 	lines := r.Lines()
 	input := parse(lines)
 
