@@ -20,9 +20,7 @@ type LightNode struct {
 	depth int
 }
 type JoltageNode struct {
-	State    []int
-	depth    int
-	distance int
+	State []int
 }
 
 func Part1() int {
@@ -142,9 +140,7 @@ func minPressesJoltages(configs []MachineConfig) int {
 }
 
 func toJoltage(old []int) (j Joltage) {
-	for i, o := range old {
-		j[i] = o
-	}
+	copy(j[:], old)
 	return
 }
 
@@ -240,21 +236,4 @@ func applyLight(button []int, state []bool) []bool {
 		nextState[i] = !nextState[i]
 	}
 	return nextState
-}
-
-func validState(state []int, goal []int) bool {
-	for i := range state {
-		if state[i] > goal[i] {
-			return false
-		}
-	}
-	return true
-}
-
-func distanceToGoal(state []int, goal []int) int {
-	var distance int
-	for i := range state {
-		distance += goal[i] - state[i]
-	}
-	return distance
 }

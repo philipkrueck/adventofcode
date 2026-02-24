@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if ! git diff --cached --name-only | grep '.go$'; then
+  exit 0
+fi
+
+echo "Running golangci-lint..."
+golangci-lint run

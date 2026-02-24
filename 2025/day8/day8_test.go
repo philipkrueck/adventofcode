@@ -128,7 +128,7 @@ func TestCreateConnections(t *testing.T) {
 		{{0, 0, 0}, {3, 4, 0}, {0, 0, 12}, {3, 4, 12}},
 	}
 
-	got := createConns(pairs)
+	got := createConns(pairs, 1000)
 
 	if !slices.EqualFunc(got, want, func(a, b []Point) bool {
 		return len(a) == len(b)

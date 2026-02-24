@@ -76,9 +76,10 @@ func operateColumns(grid [][]int, operations []Op) int {
 	total := 0
 
 	for j, op := range operations {
-		if op == Add {
+		switch op {
+		case Add:
 			total += sumColumn(grid, j)
-		} else if op == Multiply {
+		case Multiply:
 			total += multiplyColumn(grid, j)
 		}
 	}

@@ -48,6 +48,8 @@ func (lr LineReader) Next() iter.Seq[string] {
 		if err := lr.scanner.Err(); err != nil {
 			panic(err)
 		}
-		lr.file.Close()
+		if err := lr.file.Close(); err != nil {
+			panic(err)
+		}
 	}
 }
