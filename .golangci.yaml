@@ -1,0 +1,15 @@
+version: "2"
+
+formatters:
+  enable:
+    - goimports
+    - golines
+    - gci
+    - gofmt
+
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/philipkrueck/adventofcode
+    golines:
+      max-len: 120
