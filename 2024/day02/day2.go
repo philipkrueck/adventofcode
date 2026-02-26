@@ -1,3 +1,4 @@
+// Package day02 implements the solutions to day 2 of advent of code 2024
 package day02
 
 import (
@@ -80,10 +81,10 @@ func levelsSafe(levels []int, inc bool) bool {
 }
 
 func unsafeDiff(diff int, inc bool) bool {
-	if inc {
-		return diff < 1 || diff > 3
+	if !inc {
+		diff *= -1
 	}
-	return -diff < 1 || -diff > 3
+	return diff < 1 || diff > 3
 }
 
 func levelsSafeDampened(levels []int) bool {
@@ -93,6 +94,5 @@ func levelsSafeDampened(levels []int) bool {
 			return true
 		}
 	}
-
 	return false
 }
