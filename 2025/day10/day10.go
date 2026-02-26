@@ -1,3 +1,4 @@
+// Package day10 implements day10 of 2025 aoc
 package day10
 
 import (
@@ -14,7 +15,6 @@ type MachineConfig struct {
 	Joltage []int
 }
 
-// TODO: could generalize these
 type LightNode struct {
 	State []bool
 	depth int
@@ -151,9 +151,9 @@ func btnCombos(buttons [][]int) [][][]int {
 	numCombos := 1 << numButtons // 2^numButtons
 	combos := make([][][]int, numCombos)
 
-	for mask := 0; mask < numCombos; mask++ {
+	for mask := range numCombos {
 		pressed := [][]int{}
-		for btn := 0; btn < numButtons; btn++ {
+		for btn := range numButtons {
 			if (mask & (1 << btn)) != 0 {
 				pressed = append(pressed, buttons[btn])
 			}
