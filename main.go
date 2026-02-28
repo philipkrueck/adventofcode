@@ -58,5 +58,5 @@ func runPart(year int, day int, part int) {
 	ans := runner(input)
 	dur := time.Since(start)
 
-	fmt.Printf("%8v (in: %s)\n", ans, dur)
+	fmt.Printf("%10v (in: %s)\n", ans, dur)
 }

@@ -2,11 +2,16 @@
 package day03
 
 import (
+	_ "embed"
 	"regexp"
 	"strconv"
 
-	"github.com/philipkrueck/adventofcode/lines"
+	"github.com/philipkrueck/adventofcode/internal/parse"
+	"github.com/philipkrueck/adventofcode/internal/registry"
 )
+
+//go:embed input.txt
+var rawInput string
 
 var (
 	// matches mul(a,b) and captures a,b
@@ -19,21 +24,19 @@ var (
 	numRe = regexp.MustCompile(`(\d+)`)
 )
 
-func Part1() int {
-	r := lines.NewReader("2024/day03/input.txt")
-	lines := r.Lines()
+func Part1(input string) string {
+	lines := parse.Lines(input)
 
 	sum := 0
 	for _, l := range lines {
 		sum += parseLine(l)
 	}
 
-	return sum
+	return strconv.Itoa(sum)
 }
 
-func Part2() int {
-	r := lines.NewReader("2024/day03/input.txt")
-	lines := r.Lines()
+func Part2(input string) string {
+	lines := parse.Lines(input)
 
 	sum, do := 0, true
 	for _, l := range lines {
@@ -42,7 +45,13 @@ func Part2() int {
 		sum += lineSum
 	}
 
-	return sum
+	return strconv.Itoa(sum)
+}
+
+func init() {
+	const year, day = 2024, 3
+	registry.Register(year, day, 1, Part1, rawInput)
+	registry.Register(year, day, 2, Part2, rawInput)
 }
 
 func parseLine(in string) int {

@@ -2,30 +2,42 @@
 package day02
 
 import (
+	_ "embed"
 	"slices"
 	"strconv"
 	"strings"
 
-	"github.com/philipkrueck/adventofcode/lines"
+	"github.com/philipkrueck/adventofcode/internal/parse"
+	"github.com/philipkrueck/adventofcode/internal/registry"
 )
 
-func Part1() int {
-	reports := loadInput()
-	return countSafeReports(reports)
+//go:embed input.txt
+var rawInput string
+
+func Part1(input string) string {
+	reports := loadInput(input)
+	safeReports := countSafeReports(reports)
+	return strconv.Itoa(safeReports)
 }
 
-func Part2() int {
-	reports := loadInput()
-	return countSafeReportsDampened(reports)
+func Part2(input string) string {
+	reports := loadInput(input)
+	safeReports := countSafeReportsDampened(reports)
+	return strconv.Itoa(safeReports)
 }
 
-func loadInput() [][]int {
-	r := lines.NewReader("2024/day02/input.txt")
-	lines := r.Lines()
-	return Parse(lines)
+func init() {
+	const year, day = 2024, 2
+	registry.Register(year, day, 1, Part1, rawInput)
+	registry.Register(year, day, 2, Part2, rawInput)
 }
 
-func Parse(lines []string) [][]int {
+func loadInput(input string) [][]int {
+	lines := parse.Lines(input)
+	return parseLines(lines)
+}
+
+func parseLines(lines []string) [][]int {
 	reports := make([][]int, len(lines))
 	for i, line := range lines {
 		nums := strings.Fields(line)
