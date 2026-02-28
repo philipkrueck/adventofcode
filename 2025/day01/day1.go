@@ -1,19 +1,23 @@
 package day1
 
 import (
-	"fmt"
+	_ "embed"
 	"strconv"
 
-	"github.com/philipkrueck/adventofcode/lines"
+	"github.com/philipkrueck/adventofcode/internal/parse"
+	"github.com/philipkrueck/adventofcode/internal/registry"
 )
 
-func Part1() int {
+//go:embed input.txt
+var rawInput string
+
+func Part1(input string) string {
 	answer := 0
 	dial := 50
 
-	lineReader := lines.NewReader("2025/day1/input.txt")
+	lines := parse.Lines(input)
 
-	for line := range lineReader.Next() {
+	for _, line := range lines {
 		direction, suffix := line[0], line[1:]
 		clicks, _ := strconv.Atoi(suffix)
 
@@ -36,19 +40,18 @@ func Part1() int {
 		if dial == 0 {
 			answer++
 		}
-
-		fmt.Println("curr dial:", dial)
 	}
 
-	return answer
+	return strconv.Itoa(answer)
 }
 
-func Part2() int {
+func Part2(input string) string {
 	dial := 50
 	answer := 0
-	lineReader := lines.NewReader("2025/day1/input.txt")
 
-	for line := range lineReader.Next() {
+	lines := parse.Lines(input)
+	for _, line := range lines {
+
 		direction, suffix := line[0], line[1:]
 
 		clicks, _ := strconv.Atoi(suffix)
@@ -74,10 +77,13 @@ func Part2() int {
 			answer++
 			dial -= 100
 		}
-
-		fmt.Println("curr:", dial)
-		fmt.Println(line)
 	}
 
-	return answer
+	return strconv.Itoa(answer)
+}
+
+func init() {
+	const year, day = 2025, 1
+	registry.Register(year, day, 1, Part1, rawInput)
+	registry.Register(year, day, 2, Part2, rawInput)
 }

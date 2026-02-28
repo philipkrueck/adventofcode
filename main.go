@@ -8,6 +8,7 @@ import (
 
 	_ "github.com/philipkrueck/adventofcode/2015"
 	_ "github.com/philipkrueck/adventofcode/2024"
+	_ "github.com/philipkrueck/adventofcode/2025"
 	"github.com/philipkrueck/adventofcode/internal/registry"
 )
 
@@ -26,7 +27,7 @@ func main() {
 }
 
 func runAllDays(year int) {
-	for d := 1; d <= 12; d++ {
+	for d := 1; d <= 3; d++ {
 		runOneDay(year, d, 0)
 	}
 }
@@ -58,5 +59,5 @@ func runPart(year int, day int, part int) {
 	ans := runner(input)
 	dur := time.Since(start)
 
-	fmt.Printf("%10v (in: %s)\n", ans, dur)
+	fmt.Printf("%15v (in: %s)\n", ans, dur)
 }

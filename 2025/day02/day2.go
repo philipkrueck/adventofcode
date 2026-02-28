@@ -1,22 +1,24 @@
 package day2
 
 import (
-	"iter"
+	_ "embed"
 	"math"
 	"slices"
 	"strconv"
 	"strings"
 
-	"github.com/philipkrueck/adventofcode/lines"
+	"github.com/philipkrueck/adventofcode/internal/registry"
 )
+
+//go:embed input.txt
+var rawInput string
 
 type Range struct {
 	start, end int
 }
 
-func Part1() int {
-	fileContents := fileToStr("day2/input.txt")
-	ranges := parseInput(fileContents)
+func Part1(input string) string {
+	ranges := parseInput(input)
 	sum := 0
 
 	for _, r := range ranges {
@@ -28,12 +30,11 @@ func Part1() int {
 		}
 	}
 
-	return sum
+	return strconv.Itoa(sum)
 }
 
-func Part2() int {
-	fileContents := fileToStr("day2/input.txt")
-	ranges := parseInput(fileContents)
+func Part2(input string) string {
+	ranges := parseInput(input)
 	sum := 0
 
 	for _, r := range ranges {
@@ -45,25 +46,18 @@ func Part2() int {
 		}
 	}
 
-	return sum
+	return strconv.Itoa(sum)
 }
 
-func fileToStr(fileName string) string {
-	lr := lines.NewReader(fileName)
-	seq := lr.Next()
-	next, stop := iter.Pull(seq)
-	defer stop()
-
-	value, ok := next()
-	if ok {
-		return value
-	}
-
-	return ""
+func init() {
+	const year, day = 2025, 2
+	registry.Register(year, day, 1, Part1, rawInput)
+	registry.Register(year, day, 2, Part2, rawInput)
 }
 
 func parseInput(input string) []Range {
-	idRanges := strings.Split(input, ",")
+	s := strings.TrimSuffix(input, "\n")
+	idRanges := strings.Split(s, ",")
 
 	ranges := []Range{}
 
@@ -72,12 +66,12 @@ func parseInput(input string) []Range {
 
 		start, err := strconv.Atoi(singleRange[0])
 		if err != nil {
-			panic("Couldn't parse input. Expected properly formatted input")
+			panic(err)
 		}
 
 		end, err := strconv.Atoi(singleRange[1])
 		if err != nil {
-			panic("Couldn't parse input. Expected properly formatted input")
+			panic(err)
 		}
 
 		newRange := Range{start, end}
