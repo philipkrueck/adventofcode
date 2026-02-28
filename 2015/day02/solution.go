@@ -3,11 +3,12 @@ package day02
 
 import (
 	_ "embed"
+	"slices"
 	"strconv"
 	"strings"
 
-	"github.com/philipkrueck/advent-of-code/internal/parse"
-	"github.com/philipkrueck/advent-of-code/internal/registry"
+	"github.com/philipkrueck/adventofcode/internal/parse"
+	"github.com/philipkrueck/adventofcode/internal/registry"
 )
 
 //go:embed input.txt
@@ -27,7 +28,17 @@ func Part1(input string) string {
 }
 
 func Part2(input string) string {
-	return strconv.Itoa(len(input))
+	sum := 0
+	for _, present := range parse.Lines(input) {
+		l, w, h := parseLines(present)
+
+		sides := []int{l, w, h}
+		slices.Sort(sides)
+
+		ribbon := 2*sides[0] + 2*sides[1] + l*w*h
+		sum += ribbon
+	}
+	return strconv.Itoa(sum)
 }
 
 func parseLines(line string) (int, int, int) {

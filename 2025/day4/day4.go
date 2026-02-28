@@ -5,7 +5,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/philipkrueck/advent-of-code/lines"
+	"github.com/philipkrueck/adventofcode/lines"
 )
 
 func convertToGrid(lines []string) Grid {

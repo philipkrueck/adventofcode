@@ -1,3 +1,3 @@
-module github.com/philipkrueck/advent-of-code
+module github.com/philipkrueck/adventofcode
 
 go 1.26

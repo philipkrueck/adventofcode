@@ -5,7 +5,7 @@ import (
 	_ "embed"
 	"strconv"
 
-	"github.com/philipkrueck/advent-of-code/internal/registry"
+	"github.com/philipkrueck/adventofcode/internal/registry"
 )
 
 //go:embed input.txt

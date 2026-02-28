@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/philipkrueck/advent-of-code/lines"
+	"github.com/philipkrueck/adventofcode/lines"
 )
 
 type Interval struct {

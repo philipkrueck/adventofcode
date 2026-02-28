@@ -3,7 +3,7 @@ package day12
 import (
 	"strconv"
 
-	"github.com/philipkrueck/advent-of-code/lines"
+	"github.com/philipkrueck/adventofcode/lines"
 )
 
 // Based on Reddit comment: https://www.reddit.com/r/adventofcode/comments/1pkjynl/2025_day_12_day_12_solutions/

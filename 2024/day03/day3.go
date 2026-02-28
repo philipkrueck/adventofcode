@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strconv"
 
-	"github.com/philipkrueck/advent-of-code/lines"
+	"github.com/philipkrueck/adventofcode/lines"
 )
 
 var (

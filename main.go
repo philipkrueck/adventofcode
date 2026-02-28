@@ -6,8 +6,9 @@ import (
 	"os"
 	"time"
 
-	_ "github.com/philipkrueck/advent-of-code/2015"
-	"github.com/philipkrueck/advent-of-code/internal/registry"
+	_ "github.com/philipkrueck/adventofcode/2015"
+	_ "github.com/philipkrueck/adventofcode/2024"
+	"github.com/philipkrueck/adventofcode/internal/registry"
 )
 
 func main() {

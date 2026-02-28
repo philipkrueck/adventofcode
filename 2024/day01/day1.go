@@ -1,15 +1,20 @@
 package day01
 
 import (
+	_ "embed"
 	"slices"
 	"strconv"
 	"strings"
 
-	"github.com/philipkrueck/advent-of-code/lines"
+	"github.com/philipkrueck/adventofcode/internal/parse"
+	"github.com/philipkrueck/adventofcode/internal/registry"
 )
 
-func Part1() int {
-	l1, l2 := loadInput()
+//go:embed input.txt
+var rawInput string
+
+func Part1(input string) string {
+	l1, l2 := loadInput(input)
 
 	slices.Sort(l1)
 	slices.Sort(l2)
@@ -18,11 +23,11 @@ func Part1() int {
 	for i := range l1 {
 		distance += abs(l1[i] - l2[i])
 	}
-	return distance
+	return strconv.Itoa(distance)
 }
 
-func Part2() int {
-	l1, l2 := loadInput()
+func Part2(input string) string {
+	l1, l2 := loadInput(input)
 
 	freq := make(map[int]int, len(l2))
 	for _, el := range l2 {
@@ -34,16 +39,21 @@ func Part2() int {
 		similarity += el * freq[el]
 	}
 
-	return similarity
+	return strconv.Itoa(similarity)
 }
 
-func loadInput() ([]int, []int) {
-	r := lines.NewReader("2024/day01/input.txt")
-	lines := r.Lines()
-	return parse(lines)
+func init() {
+	const year, day = 2024, 1
+	registry.Register(year, day, 1, Part1, rawInput)
+	registry.Register(year, day, 2, Part2, rawInput)
 }
 
-func parse(lines []string) ([]int, []int) {
+func loadInput(input string) ([]int, []int) {
+	lines := parse.Lines(input)
+	return parseLines(lines)
+}
+
+func parseLines(lines []string) ([]int, []int) {
 	l1, l2 := make([]int, len(lines)), make([]int, len(lines))
 
 	for i, line := range lines {

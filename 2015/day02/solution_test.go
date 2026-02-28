@@ -18,6 +18,23 @@ func TestPart1(t *testing.T) {
 	}
 }
 
+func TestPart2(t *testing.T) {
+	tests := []struct {
+		in, want string
+	}{
+		{"2x3x4", "34"},
+		{"1x1x10", "14"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.in, func(t *testing.T) {
+			if got := Part2(tt.in); got != tt.want {
+				t.Errorf("got: %q; want: %q", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestParsePresent(t *testing.T) {
 	tests := []struct {
 		in                  string

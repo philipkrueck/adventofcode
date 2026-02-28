@@ -3,7 +3,7 @@ package day3
 import (
 	"math"
 
-	"github.com/philipkrueck/advent-of-code/lines"
+	"github.com/philipkrueck/adventofcode/lines"
 )
 
 func Part1() int {
