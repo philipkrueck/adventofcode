@@ -7,6 +7,7 @@ import (
 	"time"
 
 	_ "github.com/philipkrueck/adventofcode/2015"
+	_ "github.com/philipkrueck/adventofcode/2016"
 	_ "github.com/philipkrueck/adventofcode/2024"
 	_ "github.com/philipkrueck/adventofcode/2025"
 	"github.com/philipkrueck/adventofcode/internal/registry"

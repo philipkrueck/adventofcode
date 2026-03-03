@@ -1,0 +1,3 @@
+package day01
+
+import _ "github.com/philipkrueck/adventofcode/2016/day01"
