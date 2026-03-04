@@ -1,4 +1,4 @@
-package day01
+package year2016
 
 import (
 	_ "github.com/philipkrueck/adventofcode/2016/day01"
