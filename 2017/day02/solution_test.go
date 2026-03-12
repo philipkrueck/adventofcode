@@ -1,16 +1,12 @@
-package day01
+package day02
 
 import "testing"
 
 func TestPart1(t *testing.T) {
-	t.Skip("..")
 	tests := []struct {
 		in, want string
 	}{
-		{"1122", "3"},
-		{"1111", "4"},
-		{"1234", "0"},
-		{"91212129", "9"},
+		{"5 1 9 5\n7 5 3\n2 4 6 8", "18"},
 	}
 
 	for _, tt := range tests {
@@ -26,11 +22,7 @@ func TestPart2(t *testing.T) {
 	tests := []struct {
 		in, want string
 	}{
-		{"1212", "6"},
-		{"1221", "0"},
-		{"123425", "4"},
-		{"123123", "12"},
-		{"12131415", "4"},
+		{"5 9 2 8\n9 4 7 3\n3 8 6 5", "9"},
 	}
 
 	for _, tt := range tests {
