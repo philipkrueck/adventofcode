@@ -8,6 +8,7 @@ import (
 
 	_ "github.com/philipkrueck/adventofcode/2015"
 	_ "github.com/philipkrueck/adventofcode/2016"
+	_ "github.com/philipkrueck/adventofcode/2017"
 	_ "github.com/philipkrueck/adventofcode/2024"
 	_ "github.com/philipkrueck/adventofcode/2025"
 	"github.com/philipkrueck/adventofcode/internal/registry"
@@ -15,7 +16,7 @@ import (
 
 func main() {
 	year := flag.Int("year", 2025, "year to run (e.g. 2025)")
-	day := flag.Int("day", 1, "day to run (1-25; 1-12 for 2025, 0 = all days)")
+	day := flag.Int("day", 0, "day to run (1-25; 1-12 for 2025, 0 = all days)")
 	part := flag.Int("part", 0, "part to run (1 or 2)")
 	flag.Parse()
 
