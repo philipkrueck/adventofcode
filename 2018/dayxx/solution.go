@@ -19,7 +19,7 @@ func Part2(input string) string {
 }
 
 func init() {
-	const day, year = 1, 2017
+	const day, year = -1, 2018
 	registry.Register(year, day, 1, Part1, rawInput)
 	registry.Register(year, day, 2, Part2, rawInput)
 }
