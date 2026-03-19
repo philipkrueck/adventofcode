@@ -11,6 +11,7 @@ import (
 	_ "github.com/philipkrueck/adventofcode/2017"
 	_ "github.com/philipkrueck/adventofcode/2018"
 	_ "github.com/philipkrueck/adventofcode/2019"
+	_ "github.com/philipkrueck/adventofcode/2020"
 	_ "github.com/philipkrueck/adventofcode/2024"
 	_ "github.com/philipkrueck/adventofcode/2025"
 	"github.com/philipkrueck/adventofcode/internal/registry"

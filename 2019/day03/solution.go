@@ -51,10 +51,10 @@ func Part2(input string) string {
 	maps.Insert(seen, traceWire(lines[0]))
 
 	closest := math.MaxInt
-	for p, steps := range traceWire(lines[1]) {
-		if otherSteps := seen[p]; otherSteps > 0 {
-			if steps+otherSteps < closest {
-				closest = steps + otherSteps
+	for p, stepsA := range traceWire(lines[1]) {
+		if stepsB := seen[p]; stepsB > 0 {
+			if stepsA+stepsB < closest {
+				closest = stepsA + stepsB
 			}
 		}
 	}
