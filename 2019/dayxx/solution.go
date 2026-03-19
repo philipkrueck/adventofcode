@@ -10,16 +10,16 @@ import (
 //go:embed input.txt
 var rawInput string
 
+func init() {
+	const day, year = -1, 2019
+	registry.Register(year, day, 1, Part1, rawInput)
+	registry.Register(year, day, 2, Part2, rawInput)
+}
+
 func Part1(input string) string {
 	return ""
 }
 
 func Part2(input string) string {
 	return ""
-}
-
-func init() {
-	const day, year = -1, 2019
-	registry.Register(year, day, 1, Part1, rawInput)
-	registry.Register(year, day, 2, Part2, rawInput)
 }
