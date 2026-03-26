@@ -6,6 +6,8 @@ import (
 	"os"
 	"time"
 
+	"golang.design/x/clipboard"
+
 	_ "github.com/philipkrueck/adventofcode/2015"
 	_ "github.com/philipkrueck/adventofcode/2016"
 	_ "github.com/philipkrueck/adventofcode/2017"
@@ -13,6 +15,8 @@ import (
 	_ "github.com/philipkrueck/adventofcode/2019"
 	_ "github.com/philipkrueck/adventofcode/2020"
 	_ "github.com/philipkrueck/adventofcode/2021"
+	_ "github.com/philipkrueck/adventofcode/2022"
+	_ "github.com/philipkrueck/adventofcode/2023"
 	_ "github.com/philipkrueck/adventofcode/2024"
 	_ "github.com/philipkrueck/adventofcode/2025"
 	"github.com/philipkrueck/adventofcode/internal/registry"
@@ -23,6 +27,11 @@ func main() {
 	day := flag.Int("day", 0, "day to run (1-25; 1-12 for 2025, 0 = all days)")
 	part := flag.Int("part", 0, "part to run (1 or 2)")
 	flag.Parse()
+
+	err := clipboard.Init()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Warning: failed to initialize clipboard: %v\n", err)
+	}
 
 	if *day == 0 {
 		runAllDays(*year)
@@ -66,4 +75,6 @@ func runPart(year int, day int, part int) {
 	dur := time.Since(start)
 
 	fmt.Printf("%15v (in: %s)\n", ans, dur)
+
+	clipboard.Write(clipboard.FmtText, []byte(ans))
 }
