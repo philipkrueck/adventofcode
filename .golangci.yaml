@@ -4,7 +4,6 @@ formatters:
   enable:
     - goimports
     - golines
-    - gci
     - gofmt
 
   settings:
