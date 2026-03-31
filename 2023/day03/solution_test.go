@@ -2,11 +2,22 @@ package day03
 
 import "testing"
 
+var in = `467..114..
+...*......
+..35..633.
+......#...
+617*......
+.....+.58.
+..592.....
+......755.
+...$.*....
+.664.598..`
+
 func TestPart1(t *testing.T) {
 	tests := []struct {
 		in, want string
 	}{
-		{"", "1"},
+		{in, "4361"},
 	}
 
 	for _, tt := range tests {
@@ -19,11 +30,10 @@ func TestPart1(t *testing.T) {
 }
 
 func TestPart2(t *testing.T) {
-	t.Skip("skipping...")
 	tests := []struct {
 		in, want string
 	}{
-		{"", ""},
+		{in, "467835"},
 	}
 
 	for _, tt := range tests {
