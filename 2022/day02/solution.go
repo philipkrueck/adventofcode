@@ -34,7 +34,7 @@ func (s shape) beats() shape {
 	return (s + 2) % 3
 }
 
-func (s shape) loosesTo() shape {
+func (s shape) losesTo() shape {
 	return (s + 1) % 3
 }
 
@@ -95,7 +95,7 @@ func Part2(input string) string {
 		case 'Y':
 			me = op
 		case 'Z':
-			me = op.loosesTo()
+			me = op.losesTo()
 		default:
 			panic("unknown strategy")
 		}
