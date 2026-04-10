@@ -1,4 +1,4 @@
-// Package dayxx implements 2017 day xx of Advent of Code
+// Package dayxx implements 2015 day xx of Advent of Code
 package dayxx
 
 import (
@@ -19,7 +19,7 @@ func Part2(input string) string {
 }
 
 func init() {
-	const day, year = -1, 2017
+	const day, year = -1, 2015
 	registry.Register(year, day, 1, Part1, rawInput)
 	registry.Register(year, day, 2, Part2, rawInput)
 }
